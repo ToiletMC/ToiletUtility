@@ -1,8 +1,12 @@
-package me.CHANGEME.slimefunaddon;
+package net.toiletmc.toiletutility;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
@@ -13,7 +17,9 @@ import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.config.Config;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 
-public class ExampleAddon extends JavaPlugin implements SlimefunAddon {
+import java.util.UUID;
+
+public class ToiletUtility extends JavaPlugin implements SlimefunAddon {
 
     @Override
     public void onEnable() {
@@ -28,10 +34,19 @@ public class ExampleAddon extends JavaPlugin implements SlimefunAddon {
          * 1. 创建分类
          * 分类的显示物品将使用以下物品
          */
-        ItemStack itemGroupItem = new CustomItemStack(Material.DIAMOND, "&4附属分类");
+        ItemStack itemGroupItem = new CustomItemStack(Material.PLAYER_HEAD, "&x&5&b&7&5&e&e厕所实用工具");
+        String texture = "ewogICJ0aW1lc3RhbXAiIDogMTY4ODM5NzQzNDQwNiwKICAicHJvZmlsZUlkIiA6ICJhZWI3NjNlZDdlNzU0OGQyYWE5N2FmN2E3NjhlMGFlMyIsCiAgInByb2ZpbGVOYW1lIiA6ICJTa3lfQ2FzdGxlXyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS8xYjNiZTczMzA5OGRkMTZiNTg5MWYxMjE1MGJiMzQ4OGQ0ZTk1MzA0MzYzZDYyZTc3MzAwMGJiMGEzNTA5ZTlmIgogICAgfSwKICAgICJDQVBFIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS8yMzQwYzBlMDNkZDI0YTExYjE1YThiMzNjMmE3ZTllMzJhYmIyMDUxYjI0ODFkMGJhN2RlZmQ2MzVjYTdhOTMzIgogICAgfQogIH0KfQ==";
+
+        // 设置头颅也太麻烦了吧😅
+        SkullMeta skullMeta = (SkullMeta) itemGroupItem.getItemMeta();
+        skullMeta.setPlayerProfile(Bukkit.createProfile(UUID.randomUUID(), null));
+        PlayerProfile playerProfile = skullMeta.getPlayerProfile();
+        playerProfile.getProperties().add(new ProfileProperty("textures", texture));
+        skullMeta.setPlayerProfile(playerProfile);
+        itemGroupItem.setItemMeta(skullMeta);
 
         // 给你的分类提供一个独一无二的ID
-        NamespacedKey itemGroupId = new NamespacedKey(this, "addon_category");
+        NamespacedKey itemGroupId = new NamespacedKey(this, "toilet_utility");
         ItemGroup itemGroup = new ItemGroup(itemGroupId, itemGroupItem);
 
         /*
@@ -47,7 +62,7 @@ public class ExampleAddon extends JavaPlugin implements SlimefunAddon {
          * 它代表了一个3x3的有序合成配方。
          * 该配方所需的机器将在后面通过RecipeType指定。
          */
-        ItemStack[] recipe = { new ItemStack(Material.EMERALD), null, new ItemStack(Material.EMERALD), null, new ItemStack(Material.DIAMOND), null, new ItemStack(Material.EMERALD), null, new ItemStack(Material.EMERALD) };
+        ItemStack[] recipe = {new ItemStack(Material.EMERALD), null, new ItemStack(Material.EMERALD), null, new ItemStack(Material.DIAMOND), null, new ItemStack(Material.EMERALD), null, new ItemStack(Material.EMERALD)};
 
         /*
          * 4. 注册物品
@@ -68,7 +83,7 @@ public class ExampleAddon extends JavaPlugin implements SlimefunAddon {
     @Override
     public String getBugTrackerURL() {
         // 你可以在这里返回你的问题追踪器的网址，而不是 null
-        return null;
+        return "https://github.com/ToiletMC/plugin-ToiletUtility/issues";
     }
 
     @Override
